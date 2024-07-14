@@ -47,7 +47,6 @@ export const YearInputFilter = ({ title, Icon, min, max, step }) => {
         <SC.InnerInputWrapper>
           <SC.MinMaxText>Minimum</SC.MinMaxText>
           <SC.Select value={minValue} onChange={handleMinChange}>
-            <option value="">{minValue}</option>
             {productionYears.map((year) => (
               <option key={year} value={year}>
                 {year}
@@ -59,7 +58,6 @@ export const YearInputFilter = ({ title, Icon, min, max, step }) => {
         <SC.InnerInputWrapper>
           <SC.MinMaxText>Maximum</SC.MinMaxText>
           <SC.Select value={maxValue} onChange={handleMaxChange}>
-            <option value="">{maxValue}</option>
             {productionYears.map((year) => (
               <option key={year} value={year}>
                 {year}
