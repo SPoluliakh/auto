@@ -1,27 +1,40 @@
+import { useDispatch, useSelector } from "react-redux";
 import StyledMultiRangeSlider from "./InputFilters.styled";
 import UseMinMaxValues from "./hooks/useMinMaxValues";
 import { IconWrapper } from "../../../../components/IconWrapper/IconWrapper";
 import productionYears from "../../../../../../src/common/data/productionYears.json";
 import * as SC from "./InputFilters.styled";
 import { useState } from "react";
+import { getPrice } from "../../../../../redux/filters/inputFiltersStore";
+import {
+  setMinPrice,
+  setMaxPrice,
+} from "../../../../../redux/filters/inputFiltersStore";
 
 export const PriceInputFilter = ({ title, Icon, min, max, step }) => {
-  const [minValue, setMinValue] = useState(min.toString());
-  const [maxValue, setMaxValue] = useState(max.toString());
+  const dispatch = useDispatch();
+  const priceValue = useSelector(getPrice);
+
+  const [minValue, setMinValue] = useState(priceValue.min);
+  const [maxValue, setMaxValue] = useState(priceValue.max);
 
   const handleMinChange = (e) => {
     let val = parseInt(e.target.value) ? parseInt(e.target.value) : "";
     if (val > maxValue) {
-      return;
+      setMaxValue(val);
+      dispatch(setMaxPrice(val));
     }
     setMinValue(val);
+    dispatch(setMinPrice(val));
   };
   const handleMaxChange = (e) => {
     let val = parseInt(e.target.value) ? parseInt(e.target.value) : "";
     if (val < minValue) {
-      return;
+      setMinValue(val);
+      dispatch(setMinPrice(val));
     }
     setMaxValue(val);
+    dispatch(setMaxPrice(val));
   };
 
   return (

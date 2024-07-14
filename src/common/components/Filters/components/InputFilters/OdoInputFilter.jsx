@@ -1,17 +1,30 @@
+import { useDispatch, useSelector } from "react-redux";
 import StyledMultiRangeSlider from "./InputFilters.styled";
-import UseMinMaxValues from "./hooks/useMinMaxValues";
 import { IconWrapper } from "../../../IconWrapper/IconWrapper";
-import productionYears from "../../../../data/productionYears.json";
 import * as SC from "./InputFilters.styled";
 import { useState } from "react";
+import { getOdometer } from "../../../../../redux/filters/inputFiltersStore";
+import {
+  setMinOdometer,
+  setMaxOdometer,
+} from "../../../../../redux/filters/inputFiltersStore";
 
 export const OdoInputFilter = ({ title, Icon, min, max, step }) => {
-  const [minValue, setMinValue] = useState(min.toString());
-  const [maxValue, setMaxValue] = useState(max.toString());
+  const dispatch = useDispatch();
+  const odometerValue = useSelector(getOdometer);
+
+  const [minValue, setMinValue] = useState(odometerValue.min);
+  const [maxValue, setMaxValue] = useState(odometerValue.max);
 
   const handleRangeInput = (e) => {
-    setMinValue(e.minValue);
-    setMaxValue(e.maxValue);
+    if (e.minValue !== minValue) {
+      setMinValue(e.minValue);
+      dispatch(setMinOdometer(parseInt(e.minValue)));
+    }
+    if (e.maxValue !== maxValue) {
+      setMaxValue(e.maxValue);
+      dispatch(setMaxOdometer(parseInt(e.maxValue)));
+    }
   };
 
   const handleMinChange = (e) => {
@@ -20,6 +33,7 @@ export const OdoInputFilter = ({ title, Icon, min, max, step }) => {
       return;
     }
     setMinValue(val);
+    dispatch(setMinOdometer(parseInt(val)));
   };
   const handleMaxChange = (e) => {
     let val = parseInt(e.target.value) ? parseInt(e.target.value) : "";
@@ -27,6 +41,7 @@ export const OdoInputFilter = ({ title, Icon, min, max, step }) => {
       return;
     }
     setMaxValue(val);
+    dispatch(setMaxOdometer(parseInt(val)));
   };
 
   if (title === "Odometer") {
@@ -68,7 +83,6 @@ export const OdoInputFilter = ({ title, Icon, min, max, step }) => {
             minValue={minValue}
             maxValue={maxValue}
             onInput={handleRangeInput}
-            onChange={handleRangeInput}
           />
         </SC.InputWrapper>
       </SC.Wrapper>
